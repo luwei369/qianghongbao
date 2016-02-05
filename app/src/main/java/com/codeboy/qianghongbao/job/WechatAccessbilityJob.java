@@ -121,6 +121,23 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         Notification notification = (Notification) event.getParcelableData();
         PendingIntent pendingIntent = notification.contentIntent;
 
+        //增加红包来源过滤 update by lujw
+        boolean ignore = false;
+        CharSequence title = notification.extras.getCharSequence("android.title");
+        if(title != null){
+            String titleText = title.toString();
+            String[] ignoreTexts = getConfig().getIgnoreHongBaoForms();
+            for(String ignoretext : ignoreTexts){
+                if(titleText.contains(ignoretext) && !ignoretext.trim().isEmpty()){
+                    ignore = true;
+                    break;
+                }
+            }
+        }
+        if(ignore){
+            return;
+        }
+
         isFirstChecked = true;
         try {
             pendingIntent.send();

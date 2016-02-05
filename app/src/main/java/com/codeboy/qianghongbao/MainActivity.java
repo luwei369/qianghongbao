@@ -184,6 +184,39 @@ public class MainActivity extends BaseActivity {
             } else {
                 delayEditTextPre.setSummary("已延时" + delay  + "毫秒");
             }
+
+            //设置忽略红包来源 增加红包来源过滤 update by lujw
+            final EditTextPreference wxIgnoreFormTextPre = (EditTextPreference) findPreference(Config.KEY_IGNORE_HONGBAO_FORM);
+            wxIgnoreFormTextPre.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String value = String.valueOf(newValue);
+                    if(value == null){
+                        value = Config.WX_IGNORE_HONGBAO_FORM;
+                    }else{
+                        String[] ignoreTexts = Config.WX_IGNORE_HONGBAO_FORM.split("#");
+                        for(String ignoreText : ignoreTexts){
+                            if (!value.contains(ignoreText)) {
+                                value = value + "#" + ignoreText;
+                            }
+                        }
+                    }
+                    preference.setSummary(value);
+                    return true;
+                }
+            });
+            String ignoreForm = wxIgnoreFormTextPre.getText();
+            if(ignoreForm == null){
+                ignoreForm = Config.WX_IGNORE_HONGBAO_FORM;
+            }else{
+                String[] ignoreTexts = Config.WX_IGNORE_HONGBAO_FORM.split("#");
+                for(String ignoreText : ignoreTexts){
+                    if (!ignoreForm.contains(ignoreText)) {
+                        ignoreForm = ignoreForm + "#" + ignoreText;
+                    }
+                }
+            }
+            wxIgnoreFormTextPre.setSummary(ignoreForm);
         }
     }
 }

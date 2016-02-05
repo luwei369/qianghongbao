@@ -19,9 +19,11 @@ public class Config {
     public static final String KEY_ENABLE_WECHAT = "KEY_ENABLE_WECHAT";
     public static final String KEY_WECHAT_AFTER_OPEN_HONGBAO = "KEY_WECHAT_AFTER_OPEN_HONGBAO";
     public static final String KEY_WECHAT_DELAY_TIME = "KEY_WECHAT_DELAY_TIME";
+    public static final String KEY_IGNORE_HONGBAO_FORM = "KEY_IGNORE_HONGBAO_FORM";
 
     public static final int WX_AFTER_OPEN_HONGBAO = 0;
     public static final int WX_AFTER_OPEN_SEE = 1; //看大家手气
+    public static final String WX_IGNORE_HONGBAO_FORM = "";//#陕西际融#陕西思宇
 
     SharedPreferences preferences;
 
@@ -52,5 +54,23 @@ public class Config {
             return Integer.parseInt(result);
         } catch (Exception e) {}
         return defaultValue;
+    }
+
+    /** 获取忽略红包来源*/
+    public String getIgnoreHongBaoFormText() {
+        //增加红包来源过滤 update by lujw
+        String defaultValue = "";
+        String result = preferences.getString(KEY_IGNORE_HONGBAO_FORM, defaultValue);
+        if(result == null || "".equals(result.trim())){
+            return defaultValue;
+        }
+        return result;
+    }
+
+    /** 获取忽略红包来源*/
+    public String[] getIgnoreHongBaoForms() {
+        //增加红包来源过滤 update by lujw
+        String result = preferences.getString(KEY_IGNORE_HONGBAO_FORM, WX_IGNORE_HONGBAO_FORM);
+        return result.split("#");
     }
 }
